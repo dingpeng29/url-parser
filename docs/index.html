@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="免费在线URL解析工具，分解URL为协议、主机、端口、路径、查询参数、Hash等组成部分。支持URL编解码。前端开发调试必备工具。">
+<meta name="keywords" content="URL解析,URL Parser,URL解码,查询参数解析,Query String,URL组成部分">
+<meta property="og:title" content="URL在线解析器 - URL Parser | ToolBox Pro">
+<meta property="og:description" content="将URL分解为协议、主机、路径、查询参数等组成部分，支持编解码。">
+<meta property="og:url" content="https://dingpeng29.github.io/url-parser/">
+<title>URL在线解析器 - URL Parser 查询参数分解 | ToolBox Pro</title>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"URL解析器","url":"https://dingpeng29.github.io/url-parser/","description":"在线解析URL各组成部分，支持查询参数分解和编解码","applicationCategory":"Utility","operatingSystem":"All","inLanguage":"zh-CN"}
+</script>
+<style>
+:root{--bg:#f8fafc;--card:#fff;--text:#1e293b;--text2:#64748b;--border:#e2e8f0;--primary:#3b82f6;--primary-h:#2563eb;--green:#10b981;--amber:#f59e0b;--shadow:0 1px 3px rgba(0,0,0,0.06);--radius:12px;--radius-sm:8px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh;}
+.header{background:var(--card);border-bottom:1px solid var(--border);padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;}
+.header .logo{font-size:20px;font-weight:700;text-decoration:none;color:var(--text);}
+.header .back{color:var(--text2);text-decoration:none;font-size:14px;}.header .back:hover{color:var(--primary);}
+.container{max-width:850px;margin:0 auto;padding:24px 20px;}
+.hero{text-align:center;padding:32px 20px 24px;}
+.hero h1{font-size:28px;font-weight:800;color:var(--text);}
+.hero p{color:var(--text2);font-size:14px;margin-top:8px;}
+.card{background:var(--card);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);border:1px solid var(--border);margin-bottom:20px;}
+textarea{width:100%;padding:12px 16px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;font-family:'SF Mono','Consolas',monospace;resize:vertical;background:var(--bg);min-height:80px;}
+textarea:focus,input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(59,130,246,0.1);}
+.btn{padding:10px 20px;border-radius:var(--radius-sm);font-size:14px;font-weight:600;cursor:pointer;border:none;transition:all .2s;}
+.btn-primary{background:var(--primary);color:#fff;}.btn-primary:hover{background:var(--primary-h);}
+.btn-green{background:var(--green);color:#fff;}.btn-green:hover{background:#059669;}
+.btn-secondary{background:var(--bg);color:var(--text);border:1px solid var(--border);}.btn-secondary:hover{background:var(--border);}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;}
+.results{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px;}
+.result-item{padding:12px 16px;background:var(--bg);border-radius:var(--radius-sm);border:1px solid var(--border);}
+.result-item .key{font-size:11px;color:var(--text2);text-transform:uppercase;font-weight:700;}
+.result-item .val{font-size:14px;font-weight:600;font-family:'SF Mono','Consolas',monospace;color:var(--primary);word-break:break-all;margin-top:2px;}
+.query-table{width:100%;border-collapse:collapse;margin-top:8px;font-size:13px;}
+.query-table th{text-align:left;padding:6px 10px;background:var(--bg);color:var(--text2);font-size:11px;font-weight:700;}
+.query-table td{padding:8px 10px;border-bottom:1px solid var(--border);font-family:'SF Mono','Consolas',monospace;word-break:break-all;}
+.query-table .qk{color:var(--primary);font-weight:600;}
+.query-table .qv{color:var(--text);}
+.footer{text-align:center;padding:32px 20px;color:var(--text2);font-size:12px;border-top:1px solid var(--border);margin-top:32px;}.footer a{color:var(--primary);text-decoration:none;}
+.powered{text-align:center;font-size:13px;color:var(--text2);margin-top:24px;}.powered a{color:var(--primary);text-decoration:none;font-weight:600;}
+@media(max-width:640px){.hero h1{font-size:22px;}.results{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<header class="header"><a href="/url-parser/" class="logo">🔗 URL Parser</a><a href="/toolbox-pro/" class="back">← ToolBox Pro</a></header>
+<div class="container">
+<div class="hero"><h1>URL 在线解析器</h1><p>粘贴任意URL，自动分解为协议、主机、端口、路径、查询参数、Hash等组成部分。API调试、前端开发必备。</p></div>
+
+<div class="card">
+<textarea id="urlIn" placeholder="粘贴URL...&#10;例如: https://user:pass@example.com:8080/path/to/page?q=hello&page=1#section" oninput="parse()"></textarea>
+<div class="btn-row">
+<button class="btn btn-primary" onclick="parse()">解析 URL</button>
+<button class="btn btn-secondary" onclick="document.getElementById('urlIn').value='';document.getElementById('results').innerHTML='';document.getElementById('queryTable').innerHTML='';">清空</button>
+</div>
+<div class="results" id="results"></div>
+<div style="margin-top:16px;"><div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px;">📋 查询参数 (Query String)</div>
+<table class="query-table"><thead><tr><th>参数名</th><th>值 (原始)</th><th>值 (解码)</th></tr></thead><tbody id="queryTable"></tbody></table></div>
+</div>
+<div class="powered">由 <a href="/toolbox-pro/">ToolBox Pro</a> 提供支持</div>
+</div>
+<footer class="footer"><p>URL Parser — 所有处理在浏览器本地完成 · <a href="https://github.com/dingpeng29/url-parser" target="_blank">GitHub</a></p></footer>
+<script>
+function parse(){
+var url=document.getElementById('urlIn').value.trim();
+if(!url)return;
+try{
+var u=new URL(url);
+var items=[
+{key:'Href',val:u.href},
+{key:'Protocol',val:u.protocol},
+{key:'Host',val:u.host},
+{key:'Hostname',val:u.hostname},
+{key:'Port',val:u.port||'(默认)'},
+{key:'Pathname',val:u.pathname},
+{key:'Search',val:u.search||'(无)'},
+{key:'Hash',val:u.hash||'(无)'},
+{key:'Origin',val:u.origin},
+{key:'Username',val:u.username||'(无)'},
+{key:'Password',val:u.password?'***':'(无)'}
+];
+document.getElementById('results').innerHTML=items.map(function(i){
+return'<div class="result-item"><div class="key">'+i.key+'</div><div class="val">'+escHtml(i.val)+'</div></div>';
+}).join('');
+
+var params=new URLSearchParams(u.search);
+var tbody=document.getElementById('queryTable');
+if([...params].length===0){
+tbody.innerHTML='<tr><td colspan="3" style="color:var(--text2);text-align:center;">无查询参数</td></tr>';
+}else{
+tbody.innerHTML=[...params].map(function(p){
+return'<tr><td class="qk">'+escHtml(p[0])+'</td><td class="qv">'+escHtml(p[1])+'</td><td class="qv">'+escHtml(decodeURIComponent(p[1]))+'</td></tr>';
+}).join('');
+}
+}catch(e){
+document.getElementById('results').innerHTML='<div class="result-item" style="grid-column:1/-1;color:#ef4444;">URL解析失败: '+escHtml(e.message)+'</div>';
+document.getElementById('queryTable').innerHTML='';
+}
+}
+function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+document.getElementById('urlIn').value='https://user:pass@example.com:8080/path/to/page?q=hello&page=1&tag=dev#section';
+parse();
+</script>
+</body>
+</html>
